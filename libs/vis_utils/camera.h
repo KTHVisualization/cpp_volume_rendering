@@ -104,6 +104,7 @@ namespace vis
     bool KeyboardUp (unsigned char key, int x, int y);
     int MouseButton (int bt, int st, int x, int y);
     int MouseMotion (int x, int y);
+	int MouseWheel(int wheel, int direction, int x, int y);
 
     float GetSpeedKeyboardMovement ();
     void SetSpeedKeyboardMovement (float sskm);
@@ -165,6 +166,7 @@ namespace vis
     float radius;
     float speed;
     float speed_radius;
+    float speed_zoom = 50.0f;
   
     float min_radius;
     float max_radius;

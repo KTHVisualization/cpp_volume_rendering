@@ -81,6 +81,7 @@ namespace vis
     radius = 50;
     speed = 0.001f;
     speed_radius = 1.0f;
+    speed_zoom = 50.0f;
 
     min_radius = 0;
     max_radius = 1000;
@@ -104,7 +105,8 @@ namespace vis
     radius = _radius;
     speed = 0.001f;
     speed_radius = 1.0f;
-  
+    speed_zoom = 50.0f;
+
     min_radius = _min_rad;
     max_radius = _max_rad;
     
@@ -234,6 +236,24 @@ namespace vis
     }
 
     return 0;
+  }
+
+  int Camera::MouseWheel(int wheel, int direction, int x, int y)
+  {
+	  if (wheel == 0) {
+		  radius += -direction * speed_zoom;
+		  if (radius < min_radius)
+			  radius = min_radius;
+		  if (radius > max_radius)
+			  radius = max_radius;
+
+		  glm::vec3 c_e = glm::normalize(glm::vec3(c_data.eye - c_data.center));
+
+		  c_data.eye = c_e * radius;
+
+		  m_changing_camera = true;
+	  }
+	  return 0;
   }
 
   float Camera::GetSpeedKeyboardMovement ()
