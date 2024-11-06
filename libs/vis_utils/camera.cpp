@@ -252,6 +252,7 @@ namespace vis
 		  c_data.eye = c_e * radius;
 
 		  m_changing_camera = true;
+          return 1;
 	  }
 	  return 0;
   }
