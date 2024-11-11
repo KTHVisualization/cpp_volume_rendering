@@ -53,10 +53,16 @@ namespace gl
     if (!is_linked) {
         GLint max_length = 0;
         glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &max_length);
-        std::vector<GLchar> info_log(max_length);
-        glGetProgramInfoLog(shader_program, max_length, &max_length, &info_log[0]);
-        std::string info_log_str(info_log.begin(), info_log.end());
-        std::cout << info_log_str << std::endl;
+
+		if (max_length != 0) {
+            std::vector<GLchar> info_log(max_length);
+            glGetProgramInfoLog(shader_program, max_length, &max_length, &info_log[0]);
+            std::string info_log_str(info_log.begin(), info_log.end());
+            std::cout << info_log_str << std::endl;
+        }
+        else {
+			std::cout << "No info log from linking compute shader program" << std::endl;
+        }
 
         fprintf(stderr, "Error in linking compute shader program\n");
         exit(41);
