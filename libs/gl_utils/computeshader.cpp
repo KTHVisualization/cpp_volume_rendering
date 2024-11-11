@@ -46,21 +46,31 @@ namespace gl
     }
     
     glLinkProgram(shader_program);
-    glValidateProgram(shader_program);
+
+    // Check link status
+    int is_linked;
+    glGetProgramiv(shader_program, GL_LINK_STATUS, &is_linked);
+    if (!is_linked) {
+        GLint max_length = 0;
+        glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &max_length);
+
+		if (max_length != 0) {
+            std::vector<GLchar> info_log(max_length);
+            glGetProgramInfoLog(shader_program, max_length, &max_length, &info_log[0]);
+            std::string info_log_str(info_log.begin(), info_log.end());
+            std::cout << info_log_str << std::endl;
+        }
+        else {
+			std::cout << "No info log from linking compute shader program" << std::endl;
+        }
+
+        fprintf(stderr, "Error in linking compute shader program\n");
+        exit(41);
+    }
 
     gl::ExitOnGLError("gl::ComputeShader >> Unable to link shaders.");
 
-    // Check link status
-    int rvalue;
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &rvalue);
-    if (!rvalue) {
-      fprintf(stderr, "Error in linking compute shader program\n");
-      GLchar log[10240];
-      GLsizei length;
-      glGetProgramInfoLog(shader_program, 10239, &length, log);
-      fprintf(stderr, "Linker log:\n%s\n", log);
-      exit(41);
-    }
+    glValidateProgram(shader_program);
 
     gl::ExitOnGLError("gl::ComputeShader >> Unable to load and link shaders.");
     
